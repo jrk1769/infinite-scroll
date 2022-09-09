@@ -1,23 +1,37 @@
-import logo from './logo.svg';
-import './App.css';
+import { useState, useRef } from "react";
+import "./App.css";
+import Box from "./component/Box";
 
 function App() {
+  const [count, setCount] = useState(15);
+
+  const boxContainerRef = useRef();
+
+  let arr = [];
+
+  for (let i = 0; i < count; i++) {
+    arr[i] = i + 1;
+  }
+  let checkScroll = () => {
+    if (boxContainerRef.current) {
+      const { scrollTop, scrollHeight, clientHeight } = boxContainerRef.current;
+      if (scrollTop + clientHeight >= scrollHeight) {
+        setCount((prev) => prev + 5);
+      }
+    }
+  };
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <div
+        className="boxContainer"
+        ref={boxContainerRef}
+        onScroll={checkScroll}
+      >
+        {arr.map((item) => (
+          <Box value={item} key={item} />
+        ))}
+      </div>
     </div>
   );
 }
